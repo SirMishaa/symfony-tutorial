@@ -1,0 +1,139 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tutoriel - Modification de site</title>
+  <link rel="stylesheet" href="https://stackedit.io/style.css" />
+</head>
+
+<body class="stackedit">
+  <div class="stackedit__left">
+    <div class="stackedit__toc">
+      
+<ul>
+<li>
+<ul>
+<li><a href="#modification-de-site-sous-symfony-5">Modification de site sous Symfony 5</a></li>
+<li><a href="#installation-du-wsl-2">Installation du WSL 2</a></li>
+<li><a href="#installation-des-outils-de-développements-via-wsl">Installation des outils de développements (via WSL)</a></li>
+</ul>
+</li>
+</ul>
+
+    </div>
+  </div>
+  <div class="stackedit__right">
+    <div class="stackedit__html">
+      <h2 id="modification-de-site-sous-symfony-5">Modification de site sous Symfony 5</h2>
+<p>Premièrement, qu’est-ce que <a href="https://symfony.com/"><strong>Symfony</strong></a> ? <strong>Symfony</strong> est un framework PHP qui permet de développer plus facilement, plus rapidement, à moindre coût et avec des fondations solides un site internet.</p>
+<p>Ci-dessous, j’explique comment modifier le site FIFA Club Pro qui a été réalisé en été 2020.</p>
+<p><strong>Le tutoriel est structuré de la façon suivante :</strong></p>
+<ul>
+<li>Installation du WSL 2</li>
+<li>Installation des outils de développements</li>
+<li>Explication de la structure du site</li>
+<li>Modification d’une page</li>
+<li>Lancement du site en local afin de tester celui-ci</li>
+<li>Note supplémentaire</li>
+<li>Mise en ligne du site</li>
+</ul>
+<h2 id="installation-du-wsl-2">Installation du WSL 2</h2>
+<p>Afin de modifier le site, vous allez devoir installer des outils de développement, pour cela, il faut avoir installé le sous-système Linux de Windows (WSL), cette partie est dédiée à ce sujet.</p>
+<p>Afin de faciliter la mise en place de ceux-ci, nous allons utiliser le <a href="https://docs.microsoft.com/fr-fr/windows/wsl/about">WSL 2</a> de Windows.</p>
+<blockquote>
+<p>Le Sous-système Windows pour Linux permet aux développeurs d’exécuter un environnement GNU/Linux directement sur Windows, sans modification et tout en évitant la surcharge d’une machine virtuelle traditionnelle ou d’une configuration à double démarrage.</p>
+</blockquote>
+<p>Pas de panique, j’explique comment l’installer ci-dessous.</p>
+<p>Premièrement, <strong>faites la touche WIN + R</strong> afin d’ouvrir la fenêtre exécuter. Vous devriez avoir une fenêtre qui s’ouvre, dans le champ de texte, entrez <strong>winver</strong> et <strong>appuyer sur OK</strong>.</p>
+<p><img src="https://nsa40.casimages.com/img/2020/08/08/200808051934639786.png" alt="enter image description here"></p>
+<p>Vous avez normalement une fenêtre “À propos de Windows” qui s’ouvre, <strong>ce qui nous intéresse, c’est le numéro de version</strong>. Il est très probable que vous soyez sur la version 1909 de Windows, si c’est le cas, vous allez devoir <strong>absolument <a href="https://support.microsoft.com/fr-be/help/4028685/windows-10-get-the-update">mettre à jour l’ordinateur pour la version 2004</a> ou supérieur</strong>.</p>
+<p>Je vais je vais supposer que <strong>vous disposez bien de la version 2004</strong> de Windows pour la suite. (Le cas échéant, cliquez sur le lien ci-dessus afin de mettre à jour Windows).</p>
+<p>Maintenant, allez dans la recherche Windows et <strong>recherchez PowerShell</strong>, faites ensuite <strong>clic droit dessus et ouvrir en tant qu’administrateur</strong>.<br>
+<img src="https://korben.info/app/uploads/2020/06/lancer-powershell-767x1024.jpg" alt="enter image description here"></p>
+<p>Ensuite, <strong>entrez la commande suivante</strong> : (vous pouvez copier-coller)</p>
+<pre><code>dism.exe /online /enable-feature /featurename:Microsoft-Windows-Subsystem-Linux /all
+</code></pre>
+<p><strong>Il faut maintenant attendre la fin de l’installation du composant.</strong><br>
+<img src="https://korben.info/app/uploads/2020/06/wsl-powershell-1024x250.jpg" alt="enter image description here"><br>
+Lorsqu’il vous demande de redémarrer l’ordinateur maintenant, <strong>appuyez sur y et faites enter</strong>.</p>
+<p>Une fois l’ordinateur redémarré, <strong>relancez à nouveau PowerShell en tant qu’administrateur</strong> et <strong>effectué la commande suivante</strong> (vous pouvez copier-coller) :</p>
+<pre><code>dism.exe /online /enable-feature /featurename:VirtualMachinePlatform /all
+</code></pre>
+<p>Il faut <strong>de nouveau redémarrer l’ordinateur</strong> comme tout à l’heure.<br>
+<img src="https://korben.info/app/uploads/2020/06/powershell-virtualmachineplatform-1024x289.jpg" alt="enter image description here"></p>
+<p>Maintenant, il vous faut installez Ubuntu depuis le Windows Store, <strong>ouvrez donc la recherche Windows et tapez Windows Store</strong>, vous pouvez cliquer dessus pour l’ouvrir.</p>
+<p>Ensuite, en haut, <strong>recherchez Ubuntu</strong>. Vous devriez avoir quelque chose du genre :<br>
+<img src="https://media.discordapp.net/attachments/323076998576603137/741680906682761356/unknown.png?width=849&amp;height=660" alt="enter image description here"></p>
+<p><strong>Cliquez sur Ubuntu</strong> (Ubuntu simple, le premier ou Ubuntu 20.04 LTS, pas Ubuntu 18.04) et <strong>faites Installer</strong>.</p>
+<p>Une fois l’installation terminée, <strong>lancer un navigateur de recherche</strong> et <a href="https://wslstorestorage.blob.core.windows.net/wslblob/wsl_update_x64.msi"><strong>télécharger la mise à jour du noyau</strong></a>, celle-ci s’installe comme un simple programme.</p>
+<p><img src="https://korben.info/app/uploads/2020/06/noyau-linux-wsl2.jpg" alt="enter image description here"><br>
+<strong>Une fois l’installation terminée</strong>, il faut maintenant activer la version 2 de WSL, fermez la fenêtre Ubuntu si celle-ci est ouverte et <strong>faites les commandes suivantes via PowerShell en tant qu’administrateur</strong> :</p>
+<pre><code>wsl --set-default-version 2
+</code></pre>
+<p>Ainsi que :</p>
+<pre><code>wsl --set-version ubuntu 2
+</code></pre>
+<p><img src="https://korben.info/app/uploads/2020/06/wsl-set-version.jpg" alt="enter image description here"><br>
+Afin de vérifier qu’Ubuntu est bien en version WSL 2, effectuez la commande suivante (toujours via PowerShell en tant qu’administrateur) :</p>
+<pre><code>wsl --list --verbose
+</code></pre>
+<p>Enfin, vous devriez avoir quelque chose du genre :</p>
+<p><img src="https://korben.info/app/uploads/2020/06/korben20200417144706-109-1024x365.jpg" alt=""><br>
+Vérifiez bien d’avoir <strong>Ubuntu en version 2</strong>. (Si le state n’est pas en Running, ce n’est pas grave)</p>
+<p>Félicitation, vous venez d’installer le sous-système Linux ainsi qu’Ubuntu sur Windows. Maintenant que nous pouvons installer et exécuter n’importe quel programme Linux, nous sommes prêts pour la suite.</p>
+<p>Afin d’améliorer l’expérience, je vous propose d’installer le nouveau Terminal Windows. C’est facultatif mais je vous <strong>recommande</strong> de le faire, il suffit de <strong>lancer le Windows Store</strong>, rechercher <strong>Windows Terminal</strong> et de l’installer.</p>
+<p><img src="https://nsa40.casimages.com/img/2020/08/08/200808055451293057.png" alt="enter image description here"><br>
+Vous êtes maintenant prêt pour exécuter des commandes et faire lancer des programmes Linux.</p>
+<h2 id="installation-des-outils-de-développements-via-wsl">Installation des outils de développements (via WSL)</h2>
+<p>Afin de modifier et installer le site, il faut des outils de développements comme PHP, Symfony, git, … cette partie est dédiée à ce sujet.</p>
+<p>L’interaction avec le WSL se fait via des lignes de commandes, mais pas de panique, cela reste très simple.</p>
+<p>Premièrement, lancez Windows Terminal (depuis la recherche Windows). Ensuite, cliquez sur la petite flèche à côté du plus sur le barre d’onglet, vous devriez avoir Ubuntu, cliquez dessus.</p>
+<p><img src="https://images.frandroid.com/wp-content/uploads/2019/05/microsoft-windows-terminal-linux.jpg" alt="enter image description here"></p>
+<p>(Note : Il est possible qu’il vous demande de choisir un nom d’utilisateur / mot de passe, si c’est le cas, <strong>suivez les instructions</strong>, quand vous indiquez le mot de passe, les caractères n’apparaissent pas pour raison de sécurité, pas d’inquiétude à avoir, cela fonctionne)</p>
+<p>Voilà, vous êtes dans la matrice, afin de mettre à jour Ubuntu, vous pouvez faire la commande suivante :</p>
+<pre><code>sudo apt update &amp;&amp; sudo apt full-upgrade -y 
+</code></pre>
+<p>Une fois cette commande effectuée, qui permet de mettre à jour le système, nous allons donc installer PHP 7.4 qui est nécessaire pour le site Internet.</p>
+<p>Faites les commandes suivantes dans l’ordre :</p>
+<pre><code>sudo apt install fish &amp;&amp; sudo fish
+sudo apt install software-properties-common
+sudo add-apt-repository ppa:ondrej/php &amp;&amp; sudo apt update
+</code></pre>
+<p>Et ensuite :</p>
+<pre><code>sudo apt install -y php7.4 
+sudo apt install -y php7.4-mysql php7.4-curl php7.4-json php7.4-cgi php7.4-xsl php7.4-pgsql php7.4-zip
+</code></pre>
+<p>Cette commande permet d’installer PHP 7.4 ainsi que l’ensemble des modules nécessaires pour le site.</p>
+<p>Une fois l’installation effectuée, faites la commande <code>php -v</code> afin de vérifier que tout fonctionne correctement. Vous devriez avoir quelque chose du genre :</p>
+<pre><code>$ php -v
+
+PHP 7.4.8 (cli) (built: Jul 10 2020 09:59:22) ( NTS )
+Copyright (c) The PHP Group
+Zend Engine v3.4.0, Copyright (c) Zend Technologies
+    with Zend OPcache v7.4.8, Copyright (c), by Zend Technologies
+    with Xdebug v2.9.6, Copyright (c) 2002-2020, by Derick Rethans
+</code></pre>
+<p>Ce n’est pas grave si vous n’avez pas le Xdebug ni le ZendOPcache d’activé.</p>
+<p>Le site nécessite également l’installation de Node.js, nous allons l’installer via la commande suivante :</p>
+<pre><code>wget -qO- https://deb.nodesource.com/setup_14.x | sudo -E bash -
+sudo apt install -y nodejs
+</code></pre>
+<p><strong>(Il faut copier coller toute la commande cette fois-ci, même la deuxième ligne)</strong></p>
+<p>Et installer le gestionnaire de dépendance :</p>
+<pre><code>curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
+echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
+</code></pre>
+<p><strong>(Il faut copier coller toute la commande cette fois-ci, même la deuxième ligne)</strong><br>
+Et faire :</p>
+<pre><code>sudo apt-get update &amp;&amp; sudo apt-get install yarn
+</code></pre>
+<p>Afin de vérifier que tout fonctionne, vous pouvez faire la commande <code>node -v</code> et <code>yarn -v</code>, si vous voyez des numéros de version, c’est que cela fonctionne.</p>
+<p>[Suite en cours d’écriture …]</p>
+
+    </div>
+  </div>
+</body>
+
+</html>
